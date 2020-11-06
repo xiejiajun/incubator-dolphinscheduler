@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
+ *  TODO 为啥会在NettyExecutorManager和MasterServer都注册
+ *    在NettyExecutorManager中注册是因为分发作业会用到，作业运行完Worker会向Master发送RESULT请求
  *  task response processor
  */
 public class TaskResponseProcessor implements NettyRequestProcessor {
@@ -79,6 +81,7 @@ public class TaskResponseProcessor implements NettyRequestProcessor {
                 responseCommand.getAppIds(),
                 responseCommand.getTaskInstanceId(),
                 channel);
+        // TODO 将待处理的事件放入队列、让TaskResponseWorker慢慢处理
         taskResponseService.addResponse(taskResponseEvent);
     }
 

@@ -105,6 +105,7 @@ public class TaskExecuteProcessor implements NettyRequestProcessor {
         taskCallbackService.addRemoteChannel(taskExecutionContext.getTaskInstanceId(),
                 new NettyRemoteChannel(channel, command.getOpaque()));
 
+        // TODO 告诉Master任务开始执行了
         this.doAck(taskExecutionContext);
 
         // submit task

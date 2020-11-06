@@ -144,6 +144,7 @@ public class TaskExecuteThread implements Runnable {
             responseCommand.setAppIds(task.getAppIds());
         } finally {
             taskExecutionContextCacheManager.removeByTaskInstanceId(taskExecutionContext.getTaskInstanceId());
+            // TODO 任务执行完成向Master发送Result请求 同步任务执行情况，Master好判断Dag下游该不该执行
             ResponceCache.get().cache(taskExecutionContext.getTaskInstanceId(),responseCommand.convert2Command(),Event.RESULT);
             taskCallbackService.sendResult(taskExecutionContext.getTaskInstanceId(), responseCommand.convert2Command());
 

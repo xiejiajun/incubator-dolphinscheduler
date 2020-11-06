@@ -165,6 +165,7 @@ public class TaskResponseService {
                                 taskResponseEvent.getTaskInstanceId());
                     }
                     // if taskInstance is null (maybe deleted) . retry will be meaningless . so response success
+                    // TODO 和ACK类似
                     DBTaskResponseCommand taskResponseCommand = new DBTaskResponseCommand(ExecutionStatus.SUCCESS.getCode(),taskResponseEvent.getTaskInstanceId());
                     channel.writeAndFlush(taskResponseCommand.convert2Command());
                 }catch (Exception e){
