@@ -76,7 +76,7 @@ public class TaskKillProcessor implements NettyRequestProcessor {
 
     /**
      * task kill process
-     *
+     * TODO Worker端执行
      * @param channel channel channel
      * @param command command command
      */
@@ -91,12 +91,14 @@ public class TaskKillProcessor implements NettyRequestProcessor {
         taskCallbackService.addRemoteChannel(killCommand.getTaskInstanceId(),
                 new NettyRemoteChannel(channel, command.getOpaque()));
 
+        // TODO 构建Kill任务命令执行响应并发送给Master
         TaskKillResponseCommand taskKillResponseCommand = buildKillTaskResponseCommand(killCommand,result);
         taskCallbackService.sendResult(taskKillResponseCommand.getTaskInstanceId(), taskKillResponseCommand.convert2Command());
         taskExecutionContextCacheManager.removeByTaskInstanceId(taskKillResponseCommand.getTaskInstanceId());
     }
 
     /**
+     * TODO 执行Kill任务逻辑（Worker端）
      *  do kill
      * @param killCommand
      * @return kill result

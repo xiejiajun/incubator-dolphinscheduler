@@ -126,6 +126,7 @@ public class MasterTaskExecThread extends MasterBaseTaskExecThread {
                 }
                 // task instance add queue , waiting worker to kill
                 if(this.cancel || this.processInstance.getState() == ExecutionStatus.READY_STOP){
+                    // TODO 取消任务(Kill任务) Rpc , 也就是用户如果点击取消任务则后台逻辑是从数据库将任务的状态改为READY_STOP
                     cancelTaskInstance();
                 }
                 if(processInstance.getState() == ExecutionStatus.READY_PAUSE){
@@ -142,6 +143,7 @@ public class MasterTaskExecThread extends MasterBaseTaskExecThread {
                 }
                 // updateProcessInstance task instance
                 taskInstance = processService.findTaskInstanceById(taskInstance.getId());
+                // TODO 获取任务最新状态
                 processInstance = processService.findProcessInstanceById(processInstance.getId());
                 Thread.sleep(Constants.SLEEP_TIME_MILLIS);
             } catch (Exception e) {
@@ -196,6 +198,7 @@ public class MasterTaskExecThread extends MasterBaseTaskExecThread {
         Host host = Host.of(taskInstance.getHost());
         executionContext.setHost(host);
 
+        // TODO 立即发起Rpc请求进行任务Kill
         nettyExecutorManager.executeDirectly(executionContext);
 
         logger.info("master kill taskInstance name :{} taskInstance id:{}",
