@@ -113,6 +113,7 @@ public class TaskExecuteProcessor implements NettyRequestProcessor {
 
     private void doAck(TaskExecutionContext taskExecutionContext){
         // tell master that task is in executing
+        // TODO 告诉Master任务开始执行了
         TaskExecuteAckCommand ackCommand = buildAckCommand(taskExecutionContext);
         ResponceCache.get().cache(taskExecutionContext.getTaskInstanceId(),ackCommand.convert2Command(),Event.ACK);
         taskCallbackService.sendAck(taskExecutionContext.getTaskInstanceId(), ackCommand.convert2Command());

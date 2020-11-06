@@ -114,7 +114,7 @@ public class MasterServer {
         this.nettyRemotingServer = new NettyRemotingServer(serverConfig);
         // TODO 任务执行请求对应的响应处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_EXECUTE_RESPONSE, new TaskResponseProcessor());
-        // TODO 任务执行ACK处理器注册
+        // TODO 任务执行ACK处理器注册(Wokerk开始运行任务后会发送ACK告诉Master)
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_EXECUTE_ACK, new TaskAckProcessor());
         // TODO 任务KILL请求对应的响应处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_KILL_RESPONSE, new TaskKillResponseProcessor());

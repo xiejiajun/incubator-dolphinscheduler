@@ -83,6 +83,7 @@ public class TaskAckProcessor implements NettyRequestProcessor {
                 taskAckCommand.getTaskInstanceId(),
                 channel);
 
+        // TODO 将待处理的事件放入队列、让TaskResponseWorker慢慢处理
         taskResponseService.addResponse(taskResponseEvent);
     }
 

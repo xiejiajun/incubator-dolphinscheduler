@@ -100,6 +100,7 @@ public class TaskResponseService {
 
 
     /**
+     * TODO 用于临时通知Worker做一些不常见的操作
      * task worker thread
      */
     class TaskResponseWorker extends Thread {
@@ -135,6 +136,7 @@ public class TaskResponseService {
                 try {
                     TaskInstance taskInstance = processService.findTaskInstanceById(taskResponseEvent.getTaskInstanceId());
                     if (taskInstance != null){
+                        // TODO 更新任务状态到DB
                         processService.changeTaskState(taskResponseEvent.getState(),
                                 taskResponseEvent.getStartTime(),
                                 taskResponseEvent.getWorkerAddress(),
@@ -143,6 +145,7 @@ public class TaskResponseService {
                                 taskResponseEvent.getTaskInstanceId());
                     }
                     // if taskInstance is null (maybe deleted) . retry will be meaningless . so ack success
+                    // TODO 当taskInstance被删除后，再执行就没意义了，直接置为成功并发送ACK类型的请求给Worker
                     DBTaskAckCommand taskAckCommand = new DBTaskAckCommand(ExecutionStatus.SUCCESS.getCode(),taskResponseEvent.getTaskInstanceId());
                     channel.writeAndFlush(taskAckCommand.convert2Command());
                 }catch (Exception e){

@@ -114,7 +114,7 @@ public class WorkerServer {
         this.workerRegistry.registry();
 
         // retry report task status
-        // TODO 任务状态汇报线程
+        // TODO 任务状态汇报线程(开始运行后，向Master发送Ack）
         this.retryReportTaskStatusThread.start();
 
         /**

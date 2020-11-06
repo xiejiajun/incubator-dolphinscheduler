@@ -48,6 +48,7 @@ public class DBTaskAckProcessor implements NettyRequestProcessor {
         }
 
         if (taskAckCommand.getStatus() == ExecutionStatus.SUCCESS.getCode()){
+            // TODO 如果Master告诉自己任务成功了，移除Ack缓存，否则RetryReportTaskStatusThread还会继续汇报状态
             ResponceCache.get().removeAckCache(taskAckCommand.getTaskInstanceId());
         }
     }
