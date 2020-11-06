@@ -110,6 +110,7 @@ public class NettyExecutorManager extends AbstractExecutorManager<Boolean>{
         boolean success = false;
         while (!success) {
             try {
+                // TODO Rpc调用入口
                 doExecute(host,command);
                 success = true;
                 context.setHost(host);
@@ -154,6 +155,7 @@ public class NettyExecutorManager extends AbstractExecutorManager<Boolean>{
         boolean success = false;
         do {
             try {
+                // TODO 发送到Worker, Worker那边会根据command的Type分给对应的处理器进行处理
                 nettyRemotingClient.send(host, command);
                 success = true;
             } catch (Exception ex) {

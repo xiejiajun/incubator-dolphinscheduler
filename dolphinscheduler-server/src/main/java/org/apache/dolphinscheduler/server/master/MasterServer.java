@@ -112,8 +112,11 @@ public class MasterServer {
         NettyServerConfig serverConfig = new NettyServerConfig();
         serverConfig.setListenPort(masterConfig.getListenPort());
         this.nettyRemotingServer = new NettyRemotingServer(serverConfig);
+        // TODO 任务执行请求对应的响应处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_EXECUTE_RESPONSE, new TaskResponseProcessor());
+        // TODO 任务执行ACK处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_EXECUTE_ACK, new TaskAckProcessor());
+        // TODO 任务KILL请求对应的响应处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_KILL_RESPONSE, new TaskKillResponseProcessor());
         this.nettyRemotingServer.start();
 
@@ -121,9 +124,10 @@ public class MasterServer {
         this.masterRegistry.registry();
 
         // self tolerant
+        // TODO 容错
         this.zkMasterClient.start();
 
-        //
+        // TODO 任务调度线程
         masterSchedulerService.start();
 
         // start QuartzExecutors

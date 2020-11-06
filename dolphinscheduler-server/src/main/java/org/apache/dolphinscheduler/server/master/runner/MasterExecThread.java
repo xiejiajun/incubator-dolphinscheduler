@@ -182,6 +182,7 @@ public class MasterExecThread implements Runnable {
                 executeComplementProcess();
             }else{
                 // execute flow
+                // TODO 执行DAG
                 executeProcess();
             }
         }catch (Exception e){
@@ -403,6 +404,7 @@ public class MasterExecThread implements Runnable {
     }
 
     /**
+     * TODO 通过Rpc提交作业到Worker执行
      * submit task to execute
      * @param taskInstance task instance
      * @return TaskInstance
@@ -419,6 +421,7 @@ public class MasterExecThread implements Runnable {
             abstractExecThread = new MasterTaskExecThread(taskInstance);
         }
         Future<Boolean> future = taskExecService.submit(abstractExecThread);
+        // TODO 保存正在运行的Task，用另一个线程监听执行结果
         activeTaskNode.putIfAbsent(abstractExecThread, future);
         return abstractExecThread.getTaskInstance();
     }
@@ -524,6 +527,7 @@ public class MasterExecThread implements Runnable {
             if(task.getState().typeIsPause() || task.getState().typeIsCancel()){
                 logger.info("task {} stopped, the state is {}", task.getName(), task.getState());
             }else{
+                // TODO 将task添加到准备队列等待远程执行(这种用内存队列缓存即将执行的任务可以有效提高调度效率、方便设置优先级等）
                 addTaskToStandByList(task);
             }
         }
@@ -847,6 +851,7 @@ public class MasterExecThread implements Runnable {
      */
     private void runProcess(){
         // submit start node
+        // TODO 提交DAG
         submitPostNode(null);
         boolean sendTimeWarning = false;
         while(!processInstance.isProcessInstanceStop() && Stopper.isRunning()){
@@ -857,6 +862,7 @@ public class MasterExecThread implements Runnable {
                         processService.findProcessDefineById(processInstance.getProcessDefinitionId()));
                 sendTimeWarning = true;
             }
+            // TODO 处理执行结束的Task
             for(Map.Entry<MasterBaseTaskExecThread,Future<Boolean>> entry: activeTaskNode.entrySet()) {
                 Future<Boolean> future = entry.getValue();
                 TaskInstance task  = entry.getKey().getTaskInstance();
@@ -1016,6 +1022,7 @@ public class MasterExecThread implements Runnable {
     }
 
     /**
+     * TODO 从已准备队列提交已准备的Task
      * handling the list of tasks to be submitted
      */
     private void submitStandByTask(){
@@ -1024,6 +1031,7 @@ public class MasterExecThread implements Runnable {
             DependResult dependResult = getDependResultForTask(task);
             if(DependResult.SUCCESS == dependResult){
                 if(retryTaskIntervalOverTime(task)){
+                    // TODO 提交作业
                     submitTaskExec(task);
                     removeTaskFromStandbyList(task);
                 }

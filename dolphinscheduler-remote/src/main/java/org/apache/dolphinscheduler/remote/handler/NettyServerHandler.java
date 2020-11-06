@@ -82,6 +82,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        // TODO 处理请求
         processReceived(ctx.channel(), (Command) msg);
     }
 
@@ -112,7 +113,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * process received logic
-     *
+     * TODO 处理Master的Rpc请求
      * @param channel channel
      * @param msg     message
      */

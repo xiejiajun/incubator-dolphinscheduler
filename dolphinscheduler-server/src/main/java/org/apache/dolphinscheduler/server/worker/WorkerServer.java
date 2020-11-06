@@ -99,16 +99,22 @@ public class WorkerServer {
         NettyServerConfig serverConfig = new NettyServerConfig();
         serverConfig.setListenPort(workerConfig.getListenPort());
         this.nettyRemotingServer = new NettyRemotingServer(serverConfig);
+        // TODO Task执行请求处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_EXECUTE_REQUEST, new TaskExecuteProcessor());
+        // TODO Task Kill请求处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.TASK_KILL_REQUEST, new TaskKillProcessor());
+        // TODO DB TASK ACK请求处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.DB_TASK_ACK, new DBTaskAckProcessor());
+        // TODO DB TASK RESPONSE请求处理器注册
         this.nettyRemotingServer.registerProcessor(CommandType.DB_TASK_RESPONSE, new DBTaskResponseProcessor());
         this.nettyRemotingServer.start();
 
         // worker registry
+        // TODO Worker服务动态注册(ZK作为注册中心)
         this.workerRegistry.registry();
 
         // retry report task status
+        // TODO 任务状态汇报线程
         this.retryReportTaskStatusThread.start();
 
         /**
@@ -142,7 +148,9 @@ public class WorkerServer {
                 logger.warn("thread sleep exception", e);
             }
 
+            // TODO netty服务注销
             this.nettyRemotingServer.close();
+            // TODO Worker服务注销
             this.workerRegistry.unRegistry();
 
         } catch (Exception e) {

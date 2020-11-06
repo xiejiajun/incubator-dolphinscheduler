@@ -150,6 +150,7 @@ public class MasterBaseTaskExecThread implements Callable<Boolean> {
     }
 
     /**
+     * TODO 提交作业
      * submit master base task exec thread
      * @return TaskInstance
      */
@@ -165,6 +166,7 @@ public class MasterBaseTaskExecThread implements Callable<Boolean> {
             try {
                 if(!submitDB){
                     // submit task to db
+                    // TODO 先修改DB状态
                     task = processService.submitTask(taskInstance);
                     if(task != null && task.getId() != 0){
                         submitDB = true;
@@ -172,6 +174,7 @@ public class MasterBaseTaskExecThread implements Callable<Boolean> {
                 }
                 if(submitDB && !submitTask){
                     // dispatch task
+                    // TODO 分发作业
                     submitTask = dispatchTask(task);
                 }
                 if(submitDB && submitTask){
@@ -192,6 +195,7 @@ public class MasterBaseTaskExecThread implements Callable<Boolean> {
     }
 
     /**
+     * TODO 分发作业到Worker
      * dispatcht task
      * @param taskInstance taskInstance
      * @return whether submit task success
@@ -223,6 +227,8 @@ public class MasterBaseTaskExecThread implements Callable<Boolean> {
                     taskInstance.getProcessInstancePriority().getCode(),
                     taskInstance.getId(),
                     org.apache.dolphinscheduler.common.Constants.DEFAULT_WORKER_GROUP);
+            // TODO 提交到优先级队列(TaskPriorityQueueImpl)等待下发到Worker执行,
+            //  由于优先级队列是交给Spring管理的，所以这里的队列由TaskPriorityQueueConsumer消费并进行Rpc方式分发到Worker
             taskUpdateQueue.put(taskPriorityInfo);
             logger.info(String.format("master submit success, task : %s", taskInstance.getName()) );
             return true;

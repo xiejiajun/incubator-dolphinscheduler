@@ -79,6 +79,7 @@ public class ZKMasterClient extends AbstractZKClient {
 				ThreadUtils.sleep(SLEEP_TIME_MILLIS);
 			}
 			// startup tolerant
+			// TODO 启动容错
 			if (getActiveMasterNum() == 1) {
 				removeZKNodePath(null, ZKNodeType.MASTER, true);
 				removeZKNodePath(null, ZKNodeType.WORKER, true);

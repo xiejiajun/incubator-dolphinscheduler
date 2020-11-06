@@ -111,6 +111,7 @@ public class TaskPriorityQueueConsumer extends Thread{
                     // if not task , blocking here
                     String taskPriorityInfo = taskPriorityQueue.take();
                     TaskPriority taskPriority = TaskPriority.of(taskPriorityInfo);
+                    // TODO 分发作业到Worker
                     boolean dispatchResult = dispatch(taskPriority.getTaskId());
                     if(!dispatchResult){
                         failedDispatchTasks.add(taskPriorityInfo);
@@ -135,6 +136,7 @@ public class TaskPriorityQueueConsumer extends Thread{
     private boolean dispatch(int taskInstanceId){
         boolean result = false;
         try {
+            // TODO 构建Task执行上下文用于传递Task类型等信息
             TaskExecutionContext context = getTaskExecutionContext(taskInstanceId);
             ExecutionContext executionContext = new ExecutionContext(context.toCommand(), ExecutorType.WORKER, context.getWorkerGroup());
 
@@ -142,6 +144,7 @@ public class TaskPriorityQueueConsumer extends Thread{
                 // when task finish, ignore this task, there is no need to dispatch anymore
                 return true;
             }else{
+                // TODO 分发作业
                 result = dispatcher.dispatch(executionContext);
             }
         } catch (ExecuteException e) {

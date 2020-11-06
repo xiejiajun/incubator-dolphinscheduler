@@ -78,6 +78,9 @@ public class FilePluginManager implements PluginManager {
                     new PluginClassLoader(urls, Thread.currentThread().getContextClassLoader(), whitePrefixes, excludePrefixes);
             classLoaderMap.put(pluginName, classLoader);
 
+            // TODO ServiceLoader会根据META-INF/services(PREFIX = "META-INF/services/")下面的配置来加载SPI实现，这里还没用上
+            //  [ServiceLoader使用看这一篇就够了](https://www.jianshu.com/p/7601ba434ff4)
+            //  [ServiceLoader源代码分析](https://www.jianshu.com/p/a6073e9f8cb4)
             ServiceLoader<AlertPluginProvider> loader = ServiceLoader.load(AlertPluginProvider.class, classLoader);
             pluginLoaderMap.put(pluginName, loader);
 

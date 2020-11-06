@@ -126,7 +126,7 @@ public class MasterSchedulerService extends Thread {
                     mutex = zkMasterClient.blockAcquireMutex();
 
                     int activeCount = masterExecService.getActiveCount();
-                    // make sure to scan and delete command  table in one transaction
+                    // make sure to scan and delete command  table in one transaction(通过分布式锁实现)
                     Command command = processService.findOneCommand();
                     if (command != null) {
                         logger.info("find one command: id: {}, type: {}", command.getId(),command.getCommandType());
@@ -138,6 +138,7 @@ public class MasterSchedulerService extends Thread {
                                     this.masterConfig.getMasterExecThreads() - activeCount, command);
                             if (processInstance != null) {
                                 logger.info("start master exec thread , split DAG ...");
+                                // TODO 提交任务到线程池执行
                                 masterExecService.execute(new MasterExecThread(processInstance, processService, nettyRemotingClient));
                             }
                         }catch (Exception e){

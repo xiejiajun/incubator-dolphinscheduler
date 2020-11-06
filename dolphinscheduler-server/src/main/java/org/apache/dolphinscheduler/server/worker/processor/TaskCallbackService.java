@@ -70,7 +70,9 @@ public class TaskCallbackService {
     public TaskCallbackService(){
         final NettyClientConfig clientConfig = new NettyClientConfig();
         this.nettyRemotingClient = new NettyRemotingClient(clientConfig);
+        // TODO DB TASK ACK请求对应的响应处理器注册
         this.nettyRemotingClient.registerProcessor(CommandType.DB_TASK_ACK, new DBTaskAckProcessor());
+        // TODO DB_TASK_RESPONSE请求对应的响应处理器注册
         this.nettyRemotingClient.registerProcessor(CommandType.DB_TASK_RESPONSE, new DBTaskResponseProcessor());
     }
 

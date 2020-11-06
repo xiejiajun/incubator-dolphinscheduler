@@ -89,12 +89,14 @@ public class MasterTaskExecThread extends MasterBaseTaskExecThread {
     @Override
     public Boolean submitWaitComplete() {
         Boolean result = false;
+        // TODO 提交作业到数据库 & 优先级队列
         this.taskInstance = submit();
         if(this.taskInstance == null){
             logger.error("submit task instance to mysql and queue failed , please check and fix it");
             return result;
         }
         if(!this.taskInstance.getState().typeIsFinished()) {
+            // TODO 等待作业到退出状态
             result = waitTaskQuit();
         }
         taskInstance.setEndTime(new Date());
