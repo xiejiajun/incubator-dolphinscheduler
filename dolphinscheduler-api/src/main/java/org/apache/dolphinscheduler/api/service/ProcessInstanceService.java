@@ -594,6 +594,7 @@ public class ProcessInstanceService extends BaseDAGService {
 
         DAG<String, TaskNode, TaskNodeRelation> dag = processInstance2DAG(processInstance);
         //topological sort
+        // TODO 拓扑排序的结果即调度顺序
         List<String> nodeList = dag.topologicalSort();
 
         ganttDto.setTaskNames(nodeList);
