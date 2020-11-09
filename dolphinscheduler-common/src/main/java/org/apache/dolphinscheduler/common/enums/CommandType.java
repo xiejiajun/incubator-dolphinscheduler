@@ -42,6 +42,7 @@ public enum CommandType {
     RECOVER_TOLERANCE_FAULT_PROCESS(2, "recover tolerance fault process"),
     RECOVER_SUSPENDED_PROCESS(3, "recover suspended process"),
     START_FAILURE_TASK_PROCESS(4, "start process from failure task nodes"),
+    // TODO 补数据
     COMPLEMENT_DATA(5, "complement data"),
     SCHEDULER(6, "start a new process from scheduler"),
     REPEAT_RUNNING(7, "repeat running a process"),

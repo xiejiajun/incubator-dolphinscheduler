@@ -527,6 +527,7 @@ public class ExecutorService extends BaseService{
 
         // determine whether to complement
         if(commandType == CommandType.COMPLEMENT_DATA){
+            // TODO 补数据
             runMode = (runMode == null) ? RunMode.RUN_MODE_SERIAL : runMode;
             if(null != start && null != end && !start.after(end)){
                 if(runMode == RunMode.RUN_MODE_SERIAL){
