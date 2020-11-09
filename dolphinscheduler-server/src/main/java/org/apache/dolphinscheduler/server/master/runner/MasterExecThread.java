@@ -421,6 +421,7 @@ public class MasterExecThread implements Runnable {
         }else {
             abstractExecThread = new MasterTaskExecThread(taskInstance);
         }
+        // TODO 提交到任务执行线程池
         Future<Boolean> future = taskExecService.submit(abstractExecThread);
         // TODO 保存正在运行的Task，用另一个线程监听执行结果
         activeTaskNode.putIfAbsent(abstractExecThread, future);
@@ -669,6 +670,7 @@ public class MasterExecThread implements Runnable {
     }
 
     /**
+     * TODO 准备暂停
      * prepare for pause
      * 1，failed retry task in the preparation queue , returns to failure directly
      * 2，exists pause task，complement not completed, pending submission of tasks, return to suspension
@@ -677,6 +679,7 @@ public class MasterExecThread implements Runnable {
      */
     private ExecutionStatus processReadyPause(){
         if(hasRetryTaskInStandBy()){
+            // TODO 准备队列存在失败的任务，直接返回失败
             return ExecutionStatus.FAILURE;
         }
 
@@ -684,6 +687,7 @@ public class MasterExecThread implements Runnable {
         if(CollectionUtils.isNotEmpty(pauseList)
                 || !isComplementEnd()
                 || readyToSubmitTaskList.size() > 0){
+            // TOOD 存在被暂停的任务、或者补数据未完成，或者正在提交的任务存在排队现象，直接置为暂停
             return ExecutionStatus.PAUSE;
         }else{
             return ExecutionStatus.SUCCESS;
@@ -768,6 +772,7 @@ public class MasterExecThread implements Runnable {
     }
 
     /**
+     * TODO 是否补数据结束
      * whether complement end
      * @return Boolean whether is complement end
      */
@@ -930,6 +935,7 @@ public class MasterExecThread implements Runnable {
                 for(Map.Entry<String, TaskInstance> entry: completeTaskList.entrySet()) {
                     TaskInstance completeTask = entry.getValue();
                     if(completeTask.getState()== ExecutionStatus.PAUSE){
+                        // TODO 如果有任务失败, 暂停状态的Task实例置为KILL，因为失败状态比暂停优先级更高
                         completeTask.setState(ExecutionStatus.KILL);
                         completeTaskList.put(entry.getKey(), completeTask);
                         processService.updateTaskInstance(completeTask);
@@ -944,6 +950,7 @@ public class MasterExecThread implements Runnable {
             } catch (InterruptedException e) {
                 logger.error(e.getMessage(),e);
             }
+            // TODO 更新流程实例状态
             updateProcessInstanceState();
         }
 

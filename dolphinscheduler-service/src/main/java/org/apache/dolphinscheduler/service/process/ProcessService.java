@@ -109,6 +109,7 @@ public class ProcessService {
      */
     @Transactional(rollbackFor = Exception.class)
     public ProcessInstance handleCommand(Logger logger, String host, int validThreadNum, Command command) {
+        // TODO 这里会判断是正常执行、还是重跑、还是恢复暂停的任务等待
         ProcessInstance processInstance = constructProcessInstance(command, host);
         //cannot construct process instance, return null;
         if(processInstance == null){
@@ -124,6 +125,7 @@ public class ProcessService {
         processInstance.addHistoryCmd(command.getCommandType());
         saveProcessInstance(processInstance);
         this.setSubProcessParam(processInstance);
+        // TODO 一个Command翻译成processInstance后就删掉，防止被重复执行
         delCommandByid(command.getId());
         return processInstance;
     }
@@ -631,6 +633,7 @@ public class ProcessService {
                 break;
             case START_FAILURE_TASK_PROCESS:
                 // find failed tasks and init these tasks
+                // TODO 执行失败的Task
                 List<Integer> failedList = this.findTaskIdByInstanceState(processInstance.getId(), ExecutionStatus.FAILURE);
                 List<Integer> toleranceList = this.findTaskIdByInstanceState(processInstance.getId(), ExecutionStatus.NEED_FAULT_TOLERANCE);
                 List<Integer> killedList = this.findTaskIdByInstanceState(processInstance.getId(), ExecutionStatus.KILL);
@@ -651,27 +654,35 @@ public class ProcessService {
             case RECOVER_WAITTING_THREAD:
                 break;
             case RECOVER_SUSPENDED_PROCESS:
+                // TODO 恢复被暂停的作业
                 // find pause tasks and init task's state
+                // 删除正在运行的Task节点id
                 cmdParam.remove(Constants.CMDPARAM_RECOVERY_START_NODE_STRING);
+                // TODO 获取暂停状态的id列表
                 List<Integer> suspendedNodeList = this.findTaskIdByInstanceState(processInstance.getId(), ExecutionStatus.PAUSE);
+                // TODO 获取KILL状态的id列表
                 List<Integer> stopNodeList = findTaskIdByInstanceState(processInstance.getId(),
                         ExecutionStatus.KILL);
                 suspendedNodeList.addAll(stopNodeList);
                 for(Integer taskId : suspendedNodeList){
                     // initialize the pause state
+                    // TODO 修改被暂停/KILL的任务状态
                     initTaskInstance(this.findTaskInstanceById(taskId));
                 }
+                // 只执行这些Pause/KILL状态的任务id对应的Task实例
                 cmdParam.put(Constants.CMDPARAM_RECOVERY_START_NODE_STRING, String.join(",", convertIntListToString(suspendedNodeList)));
                 processInstance.setCommandParam(JSONUtils.toJson(cmdParam));
                 processInstance.setRunTimes(runTime +1);
                 break;
             case RECOVER_TOLERANCE_FAULT_PROCESS:
                 // recover tolerance fault process
+                // TODO 容错恢复
                 processInstance.setRecovery(Flag.YES);
                 runStatus = processInstance.getState();
                 break;
             case COMPLEMENT_DATA:
                 // delete all the valid tasks when complement data
+                // TODO 删除补数据时间范围内所有正常的task并补数据
                 List<TaskInstance> taskInstanceList = this.findValidTaskListByProcessId(processInstance.getId());
                 for(TaskInstance taskInstance : taskInstanceList){
                     taskInstance.setFlag(Flag.NO);
@@ -680,11 +691,14 @@ public class ProcessService {
                 initComplementDataParam(processDefinition, processInstance, cmdParam);
                 break;
             case REPEAT_RUNNING:
+                // TODO 重跑流程
                 // delete the recover task names from command parameter
+                // 先根据命令参数删除删除要重跑的task名称
                 if(cmdParam.containsKey(Constants.CMDPARAM_RECOVERY_START_NODE_STRING)){
                     cmdParam.remove(Constants.CMDPARAM_RECOVERY_START_NODE_STRING);
                     processInstance.setCommandParam(JSONUtils.toJson(cmdParam));
                 }
+                // TODO 删除要重跑的流程的所有正常Task实例
                 // delete all the valid tasks when repeat running
                 List<TaskInstance> validTaskList = findValidTaskListByProcessId(processInstance.getId());
                 for(TaskInstance taskInstance : validTaskList){

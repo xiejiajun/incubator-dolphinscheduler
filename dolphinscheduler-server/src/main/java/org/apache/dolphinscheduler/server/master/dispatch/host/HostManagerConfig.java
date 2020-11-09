@@ -42,6 +42,7 @@ public class HostManagerConfig {
 
     @Bean
     public HostManager hostManager() {
+        // TODO 初始化调度机选择策略
         String hostSelector = masterConfig.getHostSelector();
         HostSelector selector = HostSelector.of(hostSelector);
         HostManager hostManager;

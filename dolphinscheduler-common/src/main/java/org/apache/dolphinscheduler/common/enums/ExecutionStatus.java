@@ -43,14 +43,22 @@ public enum ExecutionStatus {
     SUBMITTED_SUCCESS(0, "submit success"),
     RUNNING_EXEUTION(1, "running"),
     READY_PAUSE(2, "ready pause"),
+    // TODO 暂停
     PAUSE(3, "pause"),
     READY_STOP(4, "ready stop"),
+    // TODO 停止
     STOP(5, "stop"),
+    // TODO 失败
     FAILURE(6, "failure"),
+    // TODO 成功
     SUCCESS(7, "success"),
+    // TODO 需要容错(有个别任务失败了）
     NEED_FAULT_TOLERANCE(8, "need fault tolerance"),
+    // TODO  kill
     KILL(9, "kill"),
+    // TODO 等待执行线程
     WAITTING_THREAD(10, "waiting thread"),
+    // TODO 等待依赖完成
     WAITTING_DEPEND(11, "waiting depend node complete");
 
     ExecutionStatus(int code, String descp){

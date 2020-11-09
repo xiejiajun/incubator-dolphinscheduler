@@ -242,15 +242,19 @@ public class ExecutorService extends BaseService{
 
         switch (executeType) {
             case REPEAT_RUNNING:
+                // TODO 重跑
                 result = insertCommand(loginUser, processInstanceId, processDefinition.getId(), CommandType.REPEAT_RUNNING);
                 break;
             case RECOVER_SUSPENDED_PROCESS:
+                // TODO 恢复暂停的任务
                 result = insertCommand(loginUser, processInstanceId, processDefinition.getId(), CommandType.RECOVER_SUSPENDED_PROCESS);
                 break;
             case START_FAILURE_TASK_PROCESS:
+                // TODO 启动失败的任务
                 result = insertCommand(loginUser, processInstanceId, processDefinition.getId(), CommandType.START_FAILURE_TASK_PROCESS);
                 break;
             case STOP:
+                // TODO 停止任务
                 if (processInstance.getState() == ExecutionStatus.READY_STOP) {
                     putMsg(result, Status.PROCESS_INSTANCE_ALREADY_CHANGED, processInstance.getName(), processInstance.getState());
                 } else {
@@ -258,6 +262,7 @@ public class ExecutorService extends BaseService{
                 }
                 break;
             case PAUSE:
+                // TODO 暂停任务
                 if (processInstance.getState() == ExecutionStatus.READY_PAUSE) {
                     putMsg(result, Status.PROCESS_INSTANCE_ALREADY_CHANGED, processInstance.getName(), processInstance.getState());
                 } else {

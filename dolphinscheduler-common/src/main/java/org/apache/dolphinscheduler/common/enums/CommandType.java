@@ -25,6 +25,7 @@ public enum CommandType {
 
     /**
      * command types
+     * TODO 对应的执行状态在ExecutionStatus中找
      * 0 start a new process
      * 1 start a new process from current nodes
      * 2 recover tolerance fault process
@@ -39,15 +40,21 @@ public enum CommandType {
      */
     START_PROCESS(0, "start a new process"),
     START_CURRENT_TASK_PROCESS(1, "start a new process from current nodes"),
+    // TODO 恢复失败的流程(容错)
     RECOVER_TOLERANCE_FAULT_PROCESS(2, "recover tolerance fault process"),
+    // TODO 恢复暂停的流程
     RECOVER_SUSPENDED_PROCESS(3, "recover suspended process"),
+    // TODO 启动失败任务
     START_FAILURE_TASK_PROCESS(4, "start process from failure task nodes"),
     // TODO 补数据
     COMPLEMENT_DATA(5, "complement data"),
     SCHEDULER(6, "start a new process from scheduler"),
+    // TODO 重跑
     REPEAT_RUNNING(7, "repeat running a process"),
+    // TODO 暂停
     PAUSE(8, "pause a process"),
     STOP(9, "stop a process"),
+    // TODO 恢复等待的线程
     RECOVER_WAITTING_THREAD(10, "recover waiting thread");
 
     CommandType(int code, String descp){

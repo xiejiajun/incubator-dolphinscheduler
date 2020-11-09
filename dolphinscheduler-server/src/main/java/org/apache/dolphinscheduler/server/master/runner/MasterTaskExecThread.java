@@ -167,6 +167,7 @@ public class MasterTaskExecThread extends MasterBaseTaskExecThread {
             return;
         }
         if(StringUtils.isBlank(taskInstance.getHost())){
+            // TODO 未分配到可执行的集群，改为暂停状态
             taskInstance.setState(ExecutionStatus.PAUSE);
             taskInstance.setEndTime(new Date());
             processService.updateTaskInstance(taskInstance);
