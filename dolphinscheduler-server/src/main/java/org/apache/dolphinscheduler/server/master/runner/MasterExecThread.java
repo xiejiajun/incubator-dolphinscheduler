@@ -413,12 +413,16 @@ public class MasterExecThread implements Runnable {
     private TaskInstance submitTaskExec(TaskInstance taskInstance) {
         MasterBaseTaskExecThread abstractExecThread = null;
         if(taskInstance.isSubProcess()){
+            // TODO 子DAG(子流程)执行线程
             abstractExecThread = new SubProcessTaskExecThread(taskInstance);
         }else if(taskInstance.isDependTask()){
+            // TODO 跨DAG依赖执行线程？
             abstractExecThread = new DependentTaskExecThread(taskInstance);
         }else if(taskInstance.isConditionsTask()){
+            // TODO 条件依赖执行线程
             abstractExecThread = new ConditionsTaskExecThread(taskInstance);
         }else {
+            // TODO 普通依赖执行线程
             abstractExecThread = new MasterTaskExecThread(taskInstance);
         }
         // TODO 提交到任务执行线程池
