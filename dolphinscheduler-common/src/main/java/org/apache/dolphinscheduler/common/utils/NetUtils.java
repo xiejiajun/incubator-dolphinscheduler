@@ -78,6 +78,8 @@ public class NetUtils {
      */
     public static String getHost(InetAddress inetAddress) {
         if (inetAddress != null) {
+            // TODO K8S模式使用hostname(headless service为Pod创建的DNS)作为注册信息
+            //  解决重建Worker Pod后ip变化导致的Task日志丢失(无法路由到对应节点)问题
             return Constants.KUBERNETES_MODE ? inetAddress.getHostName() : inetAddress.getHostAddress();
         }
         return null;
@@ -93,6 +95,7 @@ public class NetUtils {
             HOST_ADDRESS = getHost(address);
             return HOST_ADDRESS;
         }
+        // TODO 应该不会执行到这里
         return Constants.KUBERNETES_MODE ? "localhost" : "127.0.0.1";
     }
 
